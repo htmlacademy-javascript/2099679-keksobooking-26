@@ -11,49 +11,49 @@ const PHOTOS = [
 ];
 
 const getIncrement = () => {
-  var a = 0;
+  let a = 0;
   return () => {
     ++a;
-    return (a < 10) ? a = "0" + a : a;
-  }
-}
+    return (a < 10) ? a = '0' + a : a;
+  };
+};
 
-var getIndexOfAvatar = getIncrement();      // создаем индекс аватара
+const getIndexOfAvatar = getIncrement();      // создаем индекс аватара
 
 const getAuthor = () =>
-({                                               // создаем аватар
-  avatar: `img/avatars/user${getIndexOfAvatar()}.png`,
-});
+  ({                                               // создаем аватар
+    avatar: `img/avatars/user${getIndexOfAvatar()}.png`,
+  });
 
 const getLocation = () =>                  // создаем координаты локации
-({
-  lat: getRandomPositiveFloat(35.65000, 35.70000, 5),
-  lng: getRandomPositiveFloat(139.70000, 139.80000, 5)
-});
+  ({
+    lat: getRandomPositiveFloat(35.65000, 35.70000, 5),
+    lng: getRandomPositiveFloat(139.70000, 139.80000, 5)
+  });
 
 const getOffer = (location) =>
-({                                              // создаем предложение
-  title: 'Best offer',
-  adress: `${location.lat}, ${location.lng}`,
-  price: getRandomPositiveInteger(10000, 25000),
-  type: getRandomElement(TYPE),
-  rooms: getRandomPositiveInteger(1, 4),
-  guests: getRandomPositiveInteger(1, 4),
-  checkin: getRandomElement(CHECKIN_CHECKOUT),
-  checkout: getRandomElement(CHECKIN_CHECKOUT),
-  features: getNewList(FEATURES),
-  description: 'clean, comfortable, safe',
-  photos: getNewList(PHOTOS)
-});
+  ({                                              // создаем предложение
+    title: 'Best offer',
+    adress: `${location.lat}, ${location.lng}`,
+    price: getRandomPositiveInteger(10000, 25000),
+    type: getRandomElement(TYPE),
+    rooms: getRandomPositiveInteger(1, 4),
+    guests: getRandomPositiveInteger(1, 4),
+    checkin: getRandomElement(CHECKIN_CHECKOUT),
+    checkout: getRandomElement(CHECKIN_CHECKOUT),
+    features: getNewList(FEATURES),
+    description: 'clean, comfortable, safe',
+    photos: getNewList(PHOTOS)
+  });
 
 const getAd = () => {                            // создаем объявление
   const location = getLocation();
   return {
-  author: getAuthor(),
-  location,
-  offer: getOffer(location)
-  }
-}
+    author: getAuthor(),
+    location,
+    offer: getOffer(location)
+  };
+};
 
 const getListAd = () => Array.from({length: COUNT_OF_AD}, getAd);
 
