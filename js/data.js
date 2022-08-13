@@ -14,7 +14,7 @@ const getIncrement = () => {
   let a = 0;
   return () => {
     ++a;
-    return (a < 10) ? a = '0' + a : a;
+    return (a < 10) ? `0${a}` : a;
   };
 };
 
