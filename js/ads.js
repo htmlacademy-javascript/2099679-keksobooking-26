@@ -33,7 +33,7 @@ const getFacilityCapacity = (roomCount, guestCount) => {
   return `${roomCount} ${roomCountInfo} для ${guestCount} ${guestCountInfo}`;
 };
 
-const getFeatures = (elementClone, offerFeatures) => {
+const setFeatures = (elementClone, offerFeatures) => {
   const featureContainer = elementClone.querySelector('.popup__features');
   const featureList = featureContainer.querySelectorAll('.popup__feature');
 
@@ -72,7 +72,7 @@ createListAd.forEach((element) => {
   adElement.querySelector('.popup__type').textContent = facilityType[element.offer.type] || '';
   adElement.querySelector('.popup__text--capacity').textContent = getFacilityCapacity(element.offer.rooms, element.offer.guests) || '';
   adElement.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}.`;
-  getFeatures(adElement, element.offer.features);
+  setFeatures(adElement, element.offer.features);
   adElement.querySelector('.popup__description').textContent = element.offer.description || '';
   getPhotos(adElement, element.offer.photos);
   adElement.querySelector('.popup__avatar').src = element.author.avatar || '';
