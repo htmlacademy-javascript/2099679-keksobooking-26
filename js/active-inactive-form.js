@@ -1,8 +1,8 @@
-const adForm = document.querySelector('.ad-form');
+const adFormItem = document.querySelector('.ad-form');
 const adMapFilter = document.querySelector('.map__filters');
 
 
-const getInactiveForm = (adFormPart) => {
+const setInactiveForm = (adFormPart) => {
   adFormPart.classList.add(`${adFormPart.classList[0]}--disabled`);
 
   const adFormPartElements = Array.from(adFormPart.children);
@@ -11,7 +11,7 @@ const getInactiveForm = (adFormPart) => {
   });
 };
 
-const getActiveForm = (adFormPart) => {
+const setActiveForm = (adFormPart) => {
   adFormPart.classList.remove(`${adFormPart.classList[0]}--disabled`);
 
   const adFormPartElements = Array.from(adFormPart.children);
@@ -20,11 +20,11 @@ const getActiveForm = (adFormPart) => {
   });
 };
 
-//getInactiveForm(adForm);
-//getInactiveForm(adMapFilter);
+//setInactiveForm(adForm);
+//setInactiveForm(adMapFilter);
 
-getActiveForm(adForm);
-getActiveForm(adMapFilter);
+setActiveForm(adFormItem);
+setActiveForm(adMapFilter);
 
-export {getInactiveForm};
-export {getActiveForm};
+export {setInactiveForm};
+export {setActiveForm};
