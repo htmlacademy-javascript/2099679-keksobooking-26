@@ -1,11 +1,6 @@
-import { getListAd } from './data.js';
-
-const mapCanvas = document.querySelector('#map-canvas');
 const adTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
-
-const createListAd = getListAd();
 
 const facilityType = {
   flat: 'Квартира',
@@ -62,23 +57,20 @@ const getPhotos = (elementClone, offerPhotos) => {
   });
 };
 
-const listAdFragment = document.createDocumentFragment();
+const createCustomPopup = (element) => {
+  const popupElement = adTemplate.cloneNode(true);
+  popupElement.querySelector('.popup__title').textContent = element.offer.title || '';
+  popupElement.querySelector('.popup__text--address').textContent = element.offer.adress || '';
+  popupElement.querySelector('.popup__text--price').textContent = `${element.offer.price} ₽/ночь` || '';
+  popupElement.querySelector('.popup__type').textContent = facilityType[element.offer.type] || '';
+  popupElement.querySelector('.popup__text--capacity').textContent = getFacilityCapacity(element.offer.rooms, element.offer.guests) || '';
+  popupElement.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}.`;
+  //setFeatures(element, element.offer.features);
+  popupElement.querySelector('.popup__description').textContent = element.offer.description || '';
+  getPhotos(popupElement, element.offer.photos);
+  popupElement.querySelector('.popup__avatar').src = element.author.avatar || '';
 
-createListAd.forEach((element) => {
-  const adElement = adTemplate.cloneNode(true);
-  adElement.querySelector('.popup__title').textContent = element.offer.title || '';
-  adElement.querySelector('.popup__text--address').textContent = element.offer.adress || '';
-  adElement.querySelector('.popup__text--price').textContent = `${element.offer.price} ₽/ночь` || '';
-  adElement.querySelector('.popup__type').textContent = facilityType[element.offer.type] || '';
-  adElement.querySelector('.popup__text--capacity').textContent = getFacilityCapacity(element.offer.rooms, element.offer.guests) || '';
-  adElement.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}.`;
-  setFeatures(adElement, element.offer.features);
-  adElement.querySelector('.popup__description').textContent = element.offer.description || '';
-  getPhotos(adElement, element.offer.photos);
-  adElement.querySelector('.popup__avatar').src = element.author.avatar || '';
+  return popupElement;
+};
 
-  listAdFragment.append(adElement);
-});
-
-mapCanvas.append(listAdFragment.firstChild);
-
+export { createCustomPopup };

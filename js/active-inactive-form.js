@@ -20,7 +20,7 @@ const setActiveForm = (adFormPart) => {
   });
 };
 
-//setInactiveForm(adForm);
+//setInactiveForm(adFormItem);
 //setInactiveForm(adMapFilter);
 
 setActiveForm(adFormItem);
