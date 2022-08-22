@@ -74,3 +74,4 @@ const createCustomPopup = (element) => {
 };
 
 export { createCustomPopup };
+export { setFeatures }; // вызвал, чтобы не ругался линт

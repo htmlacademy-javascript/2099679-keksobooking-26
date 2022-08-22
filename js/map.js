@@ -1,4 +1,4 @@
-import { setActiveForm } from './active-inactive-form.js';
+//import { setActiveForm } from './active-inactive-form.js';
 import { getListAd } from './data.js';
 import { createCustomPopup } from './ads.js';
 
