@@ -6,9 +6,9 @@ const adressField = document.querySelector('#address');
 
 const map = L.map('map-canvas')
   .setView({
-    lat: 35.6895,
-    lng: 139.692,
-  }, 10);
+    lat: 35.678355,
+    lng: 139.754826,
+  }, 13);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -25,8 +25,8 @@ const mainPinIcon = L.icon({
 
 const marker = L.marker(
   {
-    lat: 35.6895,
-    lng: 139.692,
+    lat: 35.678355,
+    lng: 139.754826,
   },
   {
     draggable: true,

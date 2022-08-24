@@ -65,7 +65,7 @@ const createCustomPopup = (element) => {
   popupElement.querySelector('.popup__type').textContent = facilityType[element.offer.type] || '';
   popupElement.querySelector('.popup__text--capacity').textContent = getFacilityCapacity(element.offer.rooms, element.offer.guests) || '';
   popupElement.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}.`;
-  //setFeatures(element, element.offer.features);
+  setFeatures(popupElement, element.offer.features);
   popupElement.querySelector('.popup__description').textContent = element.offer.description || '';
   getPhotos(popupElement, element.offer.photos);
   popupElement.querySelector('.popup__avatar').src = element.author.avatar || '';
