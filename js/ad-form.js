@@ -1,22 +1,23 @@
 import { resetSlider } from './slider.js';
 import { resetMainMarker } from './map.js';
 import { sendData } from './get-send-data.js';
+import { resetMapFilter } from './filters.js';
 
 // Находим элементы формы в DOM
-const adForm = document.querySelector('.ad-form');
-const adFormPriceInput = adForm.querySelector('#price');
-const adFormFacilityType = adForm.querySelector('#type');
-const adFormRoomInput = adForm.querySelector('#room_number');
-const adFormCapasityField = adForm.querySelector('#capacity');
-const adFormCheckin = adForm.querySelector('#timein');
-const adFormCheckout = adForm.querySelector('#timeout');
-const adFormAvatar = adForm.querySelector('#avatar');
-const avatarPreview = adForm.querySelector('.ad-form-header__preview');
-const avatarPreviewImg = adForm.querySelector('.ad-form-header__preview img');
-const userImageInput = adForm.querySelector('#images');
-const userImagePreview = adForm.querySelector('.ad-form__photo');
-const submitButton = adForm.querySelector('.ad-form__submit');
-const resetButton = adForm.querySelector('.ad-form__reset');
+const adFormElement = document.querySelector('.ad-form');
+const priceInputElement = adFormElement.querySelector('#price');
+const typeInputElement = adFormElement.querySelector('#type');
+const roomNumberInputElement = adFormElement.querySelector('#room_number');
+const capasityInputElement = adFormElement.querySelector('#capacity');
+const checkInInputElement = adFormElement.querySelector('#timein');
+const checkOutInputElement = adFormElement.querySelector('#timeout');
+const avatarElement = adFormElement.querySelector('#avatar');
+const avatarPreviewElement = adFormElement.querySelector('.ad-form-header__preview');
+const avatarPreviewImgElement = adFormElement.querySelector('.ad-form-header__preview img');
+const facilityImageInputElement = adFormElement.querySelector('#images');
+const facilityImagePreviewElement = adFormElement.querySelector('.ad-form__photo');
+const submitButton = adFormElement.querySelector('.ad-form__submit');
+const resetButton = adFormElement.querySelector('.ad-form__reset');
 
 // Другие переменные
 const MIN_TITLE_LENGTH = 30;
@@ -39,7 +40,7 @@ const CAPACITY = {
 };
 
 // переменная в которой определяем классы полей валидации
-const pristine = new Pristine(adForm, {
+const pristine = new Pristine(adFormElement, {
   classTo: 'setup-ad-form',
   errorClass: 'setup-ad-form--invalid',
   seccessClass: 'setup-ad-form--valid',
@@ -52,7 +53,7 @@ const pristine = new Pristine(adForm, {
 const validateTitle = (value) => value.length >= MIN_TITLE_LENGTH && value.length <= MAX_TITLE_LENGTH;
 
 pristine.addValidator(
-  adForm.querySelector('#title'),
+  adFormElement.querySelector('#title'),
   validateTitle,
   'От 30 до 100 символов'
 );
@@ -61,87 +62,88 @@ pristine.addValidator(
 const validateMaxPricePerNight = (value) => value <= MAX_PRICE_PER_NIGTH;
 
 pristine.addValidator(
-  adFormPriceInput,
+  priceInputElement,
   validateMaxPricePerNight,
   'Не более 100 000'
 );
 
 // Валидация поля Цена за ночь в привязке к типу жилья
-const validatePricePerNight = (value) => value >= MIN_PRICE[adFormFacilityType.value];
+const validatePricePerNight = (value) => value >= MIN_PRICE[typeInputElement.value];
 
-const getValidationPriceMessage = () => `Не менее ${MIN_PRICE[adFormFacilityType.value]}`;
+const getValidationPriceMessage = () => `Не менее ${MIN_PRICE[typeInputElement.value]}`;
 
 pristine.addValidator(
-  adFormPriceInput,
+  priceInputElement,
   validatePricePerNight,
   getValidationPriceMessage
 );
 
-const onFacilityTypeChange = () => {
-  adFormPriceInput.placeholder = MIN_PRICE[adFormFacilityType.value];
+const onTypeChange = () => {
+  priceInputElement.placeholder = MIN_PRICE[typeInputElement.value];
 };
 
-adFormFacilityType.addEventListener('change', onFacilityTypeChange);
+typeInputElement.addEventListener('change', onTypeChange);
 
 // Поле «Количество комнат» синхронизировано с полем «Количество мест» таким образом,
 // что при выборе количества комнат выводятся ограничения на допустимые варианты выбора количества гостей
-const validateCapacity = () => CAPACITY[adFormRoomInput.value].includes(adFormCapasityField.value);
-const getCapacityMessage = () => `Размещение ${adFormCapasityField.value} ${adFormCapasityField.value === '1' ? 'гостя' : 'гостей'} невозможно`;
+const validateCapacity = () => CAPACITY[roomNumberInputElement.value].includes(capasityInputElement.value);
+const getCapacityMessage = () => `Размещение ${capasityInputElement.value} ${capasityInputElement.value === '1' ? 'гостя' : 'гостей'} невозможно`;
 
 pristine.addValidator(
-  adFormCapasityField,
+  capasityInputElement,
   validateCapacity,
   getCapacityMessage
 );
 // «Время заезда», «Время выезда» — выбор опции одного поля автоматически изменят значение другого (2 функции)
-const onCheckinChange = () => {
-  adFormCheckout.value = adFormCheckin.value;
+const onCheckInChange = () => {
+  checkOutInputElement.value = checkInInputElement.value;
 };
 
-adFormCheckin.addEventListener('change', onCheckinChange);
+checkInInputElement.addEventListener('change', onCheckInChange);
 
-const onCheckoutChange = () => {
-  adFormCheckin.value = adFormCheckout.value;
+const onCheckOutChange = () => {
+  checkInInputElement.value = checkOutInputElement.value;
 };
 
-adFormCheckout.addEventListener('change', onCheckoutChange);
+checkOutInputElement.addEventListener('change', onCheckOutChange);
 
 const onLoadAvatar = () => {
-  const fileItem = adFormAvatar.files[0];
-  avatarPreview.style.padding = '0';
-  avatarPreviewImg.classList.add('user-avatar');
-  avatarPreviewImg.src = URL.createObjectURL(fileItem);
+  const fileItem = avatarElement.files[0];
+  avatarPreviewElement.style.padding = '0';
+  avatarPreviewImgElement.classList.add('user-avatar');
+  avatarPreviewImgElement.src = URL.createObjectURL(fileItem);
 };
 
 const resetAvatar = () => {
-  avatarPreview.style.padding = '0 15px';
-  avatarPreviewImg.classList.remove('user-avatar');
-  avatarPreviewImg.src = 'img/muffin-grey.svg';
+  avatarPreviewElement.style.padding = '0 15px';
+  avatarPreviewImgElement.classList.remove('user-avatar');
+  avatarPreviewImgElement.src = 'img/muffin-grey.svg';
 };
 
-adFormAvatar.addEventListener('change', onLoadAvatar);
+avatarElement.addEventListener('change', onLoadAvatar);
 
-const onLoadUserImage = () => {
-  const imgItem = userImageInput.files[0];
+const onLoadFacilityImage = () => {
+  const imgItem = facilityImageInputElement.files[0];
   const photo = document.createElement('img');
   photo.classList.add('inlineImg');
   photo.src = URL.createObjectURL(imgItem);
-  userImagePreview.appendChild(photo);
+  facilityImagePreviewElement.appendChild(photo);
 };
 
-const resetUserImage = () => {
-  userImagePreview.textContent = '';
+const resetFacilityImage = () => {
+  facilityImagePreviewElement.textContent = '';
 };
 
-userImageInput.addEventListener('change', onLoadUserImage);
+facilityImageInputElement.addEventListener('change', onLoadFacilityImage);
 
 
 const resetAdForm = () => {
-  adForm.reset();
+  adFormElement.reset();
   resetSlider();
   resetMainMarker();
   resetAvatar();
-  resetUserImage();
+  resetFacilityImage();
+  resetMapFilter();
 };
 // сброс формы через кнопку Очистить
 resetButton.addEventListener('click', (evt) => {
@@ -163,7 +165,7 @@ const unblockSubmitButton = () => {
 
 // Обработчик события, запускающий валидацию и отправляющий данные на сервер
 const setAdFormSubmit = (onSuccess) => {
-  adForm.addEventListener('submit', (evt) => {
+  adFormElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
     if (isValid) {
