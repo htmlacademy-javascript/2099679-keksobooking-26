@@ -22,3 +22,9 @@ noUiSlider.create(sliderForPrice, {
 sliderForPrice.noUiSlider.on('update', () => {
   adFormPriceInput.value = sliderForPrice.noUiSlider.get();
 });
+
+const resetSlider = () => {
+  sliderForPrice.noUiSlider.reset();
+};
+
+export { resetSlider };

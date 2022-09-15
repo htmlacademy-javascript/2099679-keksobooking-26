@@ -308,6 +308,13 @@ fieldset {
   background-color: #dadada;
 }
 
+.user-avatar {
+  width: 70px;
+  height: 70px;
+
+  border-radius: 5px;
+}
+
 .ad-form__field {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -598,6 +605,8 @@ fieldset {
 }
 
 .ad-form__photo {
+  display: flex;
+
   margin-right: 10px;
   margin-bottom: 10px;
 
@@ -605,6 +614,15 @@ fieldset {
   height: 70px;
 
   background-color: #e4e4de;
+  border-radius: 5px;
+}
+
+.inlineImg {
+  margin-right: 8px;
+
+  min-width: 100%;
+  min-height: 100%;
+
   border-radius: 5px;
 }
 
@@ -1034,4 +1052,9 @@ fieldset {
 
 .hidden {
   display: none;
+}
+
+.ad-form .form-error {
+  color: red;
+  font-size: 18px;
 }

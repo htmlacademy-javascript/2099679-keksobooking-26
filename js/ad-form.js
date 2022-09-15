@@ -1,4 +1,8 @@
-//находим элементы формы в DOM
+import { resetSlider } from './slider.js';
+import { resetMainMarker } from './map.js';
+import { sendData } from './get-send-data.js';
+
+// Находим элементы формы в DOM
 const adForm = document.querySelector('.ad-form');
 const adFormPriceInput = adForm.querySelector('#price');
 const adFormFacilityType = adForm.querySelector('#type');
@@ -6,6 +10,14 @@ const adFormRoomInput = adForm.querySelector('#room_number');
 const adFormCapasityField = adForm.querySelector('#capacity');
 const adFormCheckin = adForm.querySelector('#timein');
 const adFormCheckout = adForm.querySelector('#timeout');
+const adFormAvatar = adForm.querySelector('#avatar');
+const avatarPreview = adForm.querySelector('.ad-form-header__preview');
+const avatarPreviewImg = adForm.querySelector('.ad-form-header__preview img');
+const userImageInput = adForm.querySelector('#images');
+const userImagePreview = adForm.querySelector('.ad-form__photo');
+const submitButton = adForm.querySelector('.ad-form__submit');
+const resetButton = adForm.querySelector('.ad-form__reset');
+
 // Другие переменные
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -72,7 +84,7 @@ const onFacilityTypeChange = () => {
 adFormFacilityType.addEventListener('change', onFacilityTypeChange);
 
 // Поле «Количество комнат» синхронизировано с полем «Количество мест» таким образом,
-//что при выборе количества комнат выводятся ограничения на допустимые варианты выбора количества гостей
+// что при выборе количества комнат выводятся ограничения на допустимые варианты выбора количества гостей
 const validateCapacity = () => CAPACITY[adFormRoomInput.value].includes(adFormCapasityField.value);
 const getCapacityMessage = () => `Размещение ${adFormCapasityField.value} ${adFormCapasityField.value === '1' ? 'гостя' : 'гостей'} невозможно`;
 
@@ -94,9 +106,80 @@ const onCheckoutChange = () => {
 
 adFormCheckout.addEventListener('change', onCheckoutChange);
 
-// Обработчик события, запускающий валидацию
-adForm.addEventListener('submit', (evt) => {
+const onLoadAvatar = () => {
+  const fileItem = adFormAvatar.files[0];
+  avatarPreview.style.padding = '0';
+  avatarPreviewImg.classList.add('user-avatar');
+  avatarPreviewImg.src = URL.createObjectURL(fileItem);
+};
+
+const resetAvatar = () => {
+  avatarPreview.style.padding = '0 15px';
+  avatarPreviewImg.classList.remove('user-avatar');
+  avatarPreviewImg.src = 'img/muffin-grey.svg';
+};
+
+adFormAvatar.addEventListener('change', onLoadAvatar);
+
+const onLoadUserImage = () => {
+  const imgItem = userImageInput.files[0];
+  const photo = document.createElement('img');
+  photo.classList.add('inlineImg');
+  photo.src = URL.createObjectURL(imgItem);
+  userImagePreview.appendChild(photo);
+};
+
+const resetUserImage = () => {
+  userImagePreview.textContent = '';
+};
+
+userImageInput.addEventListener('change', onLoadUserImage);
+
+
+const resetAdForm = () => {
+  adForm.reset();
+  resetSlider();
+  resetMainMarker();
+  resetAvatar();
+  resetUserImage();
+};
+// сброс формы через кнопку Очистить
+resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
-  pristine.validate();
+  resetAdForm();
 });
 
+// Блокировка кнопки отправки данных формы
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикуем...';
+};
+
+// Разблокирока кнопки отправки данных формы
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+// Обработчик события, запускающий валидацию и отправляющий данные на сервер
+const setAdFormSubmit = (onSuccess) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          onSuccess();
+          unblockSubmitButton();
+        },
+        () => {
+          unblockSubmitButton();
+        },
+        new FormData (evt.target),
+      );
+    }
+  });
+};
+
+export {setAdFormSubmit, resetAdForm };

@@ -31,30 +31,37 @@ const getFacilityCapacity = (roomCount, guestCount) => {
 const setFeatures = (elementClone, offerFeatures) => {
   const featureContainer = elementClone.querySelector('.popup__features');
   const featureList = featureContainer.querySelectorAll('.popup__feature');
-
-  featureList.forEach((featureListItem) => {
-    const isNecessary = offerFeatures.some(
-      (offerFeature) => featureListItem.classList.contains(`popup__feature--${offerFeature}`),
-    );
-    if (!isNecessary) {
-      featureListItem.remove();
-    }
-  });
+  if (offerFeatures) {
+    featureList.forEach((featureListItem) => {
+      const isNecessary = offerFeatures.some(
+        (offerFeature) => featureListItem.classList.contains(`popup__feature--${offerFeature}`),
+      );
+      if (!isNecessary) {
+        featureListItem.remove();
+      }
+    });
+  } else {
+    featureContainer.innerHTML = '';
+  }
 };
 
 const getPhotos = (elementClone, offerPhotos) => {
   const photoContainer = elementClone.querySelector('.popup__photos');
   photoContainer.innerHTML = '';
-  offerPhotos.forEach((offerPhoto) => {
-    const newPhotoElement = document.createElement('img');
-    newPhotoElement.src = `${offerPhoto}`;
-    newPhotoElement.class = 'popup__photo';
-    newPhotoElement.width = '45';
-    newPhotoElement.height= '40';
-    newPhotoElement.alt = 'Фотография жилья';
+  if (offerPhotos) {
+    offerPhotos.forEach((offerPhoto) => {
+      const newPhotoElement = document.createElement('img');
+      newPhotoElement.src = `${offerPhoto}`;
+      newPhotoElement.class = 'popup__photo';
+      newPhotoElement.width = '45';
+      newPhotoElement.height= '40';
+      newPhotoElement.alt = 'Фотография жилья';
 
-    photoContainer.append(newPhotoElement);
-  });
+      photoContainer.append(newPhotoElement);
+    });
+  } else {
+    photoContainer.innerHTML = '';
+  }
 };
 
 const createCustomPopup = (element) => {
@@ -74,4 +81,3 @@ const createCustomPopup = (element) => {
 };
 
 export { createCustomPopup };
-export { setFeatures }; // вызвал, чтобы не ругался линт
