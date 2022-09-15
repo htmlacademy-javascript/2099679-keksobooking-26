@@ -1,7 +1,6 @@
 const adFormItem = document.querySelector('.ad-form');
 const adMapFilter = document.querySelector('.map__filters');
 
-
 const setInactiveForm = (adFormPart) => {
   adFormPart.classList.add(`${adFormPart.classList[0]}--disabled`);
 
@@ -20,11 +19,7 @@ const setActiveForm = (adFormPart) => {
   });
 };
 
-//setInactiveForm(adFormItem);
-//setInactiveForm(adMapFilter);
+setInactiveForm(adFormItem);
+setInactiveForm(adMapFilter);
 
-setActiveForm(adFormItem);
-setActiveForm(adMapFilter);
-
-export {setInactiveForm};
-export {setActiveForm};
+export { setActiveForm };
