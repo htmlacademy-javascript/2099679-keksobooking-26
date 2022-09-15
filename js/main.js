@@ -1,8 +1,8 @@
 import './ads.js';
-import './active-inactive-form.js';
-import './ad-form.js';
 import './slider.js';
+import './ad-form.js';
 import './filters.js';
+import './active-inactive-form.js';
 import { createMarkers } from './map.js';
 import { getData } from './get-send-data.js';
 import { setAdFormSubmit, resetAdForm } from './ad-form.js';

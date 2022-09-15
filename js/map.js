@@ -6,12 +6,13 @@ const ZOOM = 13;
 const LAT_CITY = 35.678355;
 const LNG_CITY = 139.754826;
 const LAYER_CITY = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const adFormItem = document.querySelector('.ad-form');
-const adressField = document.querySelector('#address');
+
+const adFormElement = document.querySelector('.ad-form');
+const adressInputElement = document.querySelector('#address');
 // Загружаем карту и делаем активной форму объявления
 const map = L.map('map-canvas')
   .on('load', () => {
-    setActiveForm(adFormItem);
+    setActiveForm(adFormElement);
   })
   .setView({
     lat: LAT_CITY,
@@ -45,11 +46,11 @@ const mainMarker = L.marker(
 // Записывает координаты выбранной точки в поле адреса
 mainMarker.on('moveend', (evt) => {
   const { lat, lng } = evt.target.getLatLng();
-  adressField.value = `${lat.toFixed(DIGIT_AMOUNT)}, ${lng.toFixed(DIGIT_AMOUNT)}`;
+  adressInputElement.value = `${lat.toFixed(DIGIT_AMOUNT)}, ${lng.toFixed(DIGIT_AMOUNT)}`;
 });
 
 const setDefaultAdress = () => {
-  adressField.value = `${LAT_CITY}, ${LNG_CITY}`;
+  adressInputElement.value = `${LAT_CITY}, ${LNG_CITY}`;
 };
 
 setDefaultAdress();

@@ -14,20 +14,20 @@ const priceFilter = mapFilter.querySelector('#housing-price');
 const roomsFilter = mapFilter.querySelector('#housing-rooms');
 const guestsFilter = mapFilter.querySelector('#housing-guests');
 
-const getTypeFilterValue = (type) => typeFilter.value === type || typeFilter.value === DEFAULT_VALUE;
-const getRoomsFilterValue = (rooms) => Number(roomsFilter.value) === rooms || roomsFilter.value === DEFAULT_VALUE;
-const getGuestsFilterValue = (guests) => Number(guestsFilter.value) === guests || guestsFilter.value === DEFAULT_VALUE;
+const checkTypeFilter = (type) => typeFilter.value === type || typeFilter.value === DEFAULT_VALUE;
+const checkRoomsFilter = (rooms) => Number(roomsFilter.value) === rooms || roomsFilter.value === DEFAULT_VALUE;
+const checkGuestsFilter = (guests) => Number(guestsFilter.value) === guests || guestsFilter.value === DEFAULT_VALUE;
 
-const getPriceFilterValue = (offer) => {
-  const getPriceValue = () => {
+const checkPriceFilter = (offer) => {
+  const checkPriceValue = () => {
     if (Number(offer.price) < LOW_PRICE) {return 'low';}
     if (Number(offer.price) > HIGH_PRICE) {return 'high';}
     if (Number(offer.price) > LOW_PRICE && Number(offer.price) < HIGH_PRICE) {return 'middle';}
   };
-  return getPriceValue() === priceFilter.value || priceFilter.value === DEFAULT_VALUE;
+  return checkPriceValue() === priceFilter.value || priceFilter.value === DEFAULT_VALUE;
 };
 
-const getCheckedFeatures = (offer) => {
+const checkCheckedFeatures = (offer) => {
   const checkedFeatures = document.querySelectorAll('[name="features"]:checked');
   const checkedFeaturesArray = Array.from(checkedFeatures).map((item) => item.value);
   return checkedFeaturesArray.every((el) => {
@@ -39,17 +39,24 @@ const getCheckedFeatures = (offer) => {
 
 const filterAds = (offers, newArray) => {
   const filteredAds = offers.filter(({offer}) =>
-    getTypeFilterValue(offer.type) &&
-    getRoomsFilterValue(offer.rooms) &&
-    getGuestsFilterValue(offer.guests) &&
-    getPriceFilterValue(offer) &&
-    getCheckedFeatures(offer)
+    checkTypeFilter(offer.type) &&
+    checkRoomsFilter(offer.rooms) &&
+    checkGuestsFilter(offer.guests) &&
+    checkPriceFilter(offer) &&
+    checkCheckedFeatures(offer)
   );
   newArray(filteredAds.slice(0, AD_COUNT));
 };
 
-const onChangeFilter = debounce(() => {
+const onChangeMapFilter = debounce(() => {
   filterAds(data, createMarkers);
 }, RERENDER_DELAY);
 
-mapFilter.addEventListener('change', onChangeFilter);
+mapFilter.addEventListener('change', onChangeMapFilter);
+
+const resetMapFilter = () => {
+  mapFilter.reset();
+  filterAds(data, createMarkers);
+};
+
+export { resetMapFilter };
